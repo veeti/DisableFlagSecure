@@ -1,0 +1,43 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:0.12.+'
+    }
+}
+
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 20
+    buildToolsVersion '20.0.0'
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 20
+        versionCode 1
+        versionName "1.0"
+    }
+
+    signingConfigs {
+        release {
+            storePassword System.env['SIGNING_PASSWORD']
+            keyAlias 'veeti'
+            keyPassword ''
+        }
+    }
+
+    if (System.env['SIGNING_KEYSTORE']) {
+        signingConfigs.release.storeFile = file(System.env['SIGNING_KEYSTORE'])
+        buildTypes.release.signingConfig = signingConfigs.release
+    } else {
+        buildTypes.release.signingConfig = null
+        print "Release signing not set up. Set SIGNING_KEYSTORE and SIGNING_PASSWORD in the environment.\n"
+    }
+}
+
+dependencies {
+    provided files('libs/XposedBridge.jar')
+}
