@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">DisableFlagSecure</string>
-    <string name="xposed_description">Disables screenshot and screen capture protection in windows marked with FLAG_SECURE.</string>
+    <string name="xposed_description">Disables FLAG_SECURE on all windows, enabling screenshots and screen capture in apps that normally wouldn\'t allow it.</string>
 </resources>
