@@ -20,7 +20,7 @@ public class DisableFlagSecureModule implements IXposedHookLoadPackage {
             XposedHelpers.findAndHookMethod(SurfaceView.class, "setSecure", boolean.class,
                     mRemoveSetSecureHook);
         }
-	}
+    }
 
     private final XC_MethodHook mRemoveSecureFlagHook = new XC_MethodHook() {
         @Override
