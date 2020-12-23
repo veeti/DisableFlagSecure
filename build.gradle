@@ -1,10 +1,12 @@
 buildscript {
     repositories {
         mavenCentral()
+        google()
+        jcenter()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.12.+'
+        classpath 'com.android.tools.build:gradle:4.0.0'
     }
 }
 
@@ -39,5 +41,5 @@ android {
 }
 
 dependencies {
-    provided files('libs/XposedBridge.jar')
+    provided 'de.robv.android.xposed:api:82'
 }
