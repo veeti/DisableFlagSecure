@@ -1,10 +1,12 @@
 buildscript {
     repositories {
         mavenCentral()
+        google()
+        jcenter()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.12.+'
+        classpath 'com.android.tools.build:gradle:4.0.0'
     }
 }
 
@@ -21,23 +23,16 @@ android {
         versionName "1.2"
     }
 
-    signingConfigs {
-        release {
-            storePassword System.env['SIGNING_PASSWORD']
-            keyAlias 'veeti'
-            keyPassword ''
-        }
-    }
-
-    if (System.env['SIGNING_KEYSTORE']) {
-        signingConfigs.release.storeFile = file(System.env['SIGNING_KEYSTORE'])
-        buildTypes.release.signingConfig = signingConfigs.release
-    } else {
-        buildTypes.release.signingConfig = null
-        print "Release signing not set up. Set SIGNING_KEYSTORE and SIGNING_PASSWORD in the environment.\n"
+    lintOptions {
+        abortOnError false
     }
 }
 
+repositories {
+    jcenter()
+    google()
+}
+
 dependencies {
-    provided files('libs/XposedBridge.jar')
+    compileOnly 'de.robv.android.xposed:api:82'
 }
