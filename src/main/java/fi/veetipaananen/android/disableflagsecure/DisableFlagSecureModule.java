@@ -1,7 +1,10 @@
 package fi.veetipaananen.android.disableflagsecure;
 
 import android.os.Build;
+import android.view.Display;
 import android.view.SurfaceView;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -16,6 +19,9 @@ public class DisableFlagSecureModule implements IXposedHookLoadPackage {
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam loadPackageParam) throws Throwable {
         XposedHelpers.findAndHookMethod(Window.class, "setFlags", int.class, int.class,
                 mRemoveSecureFlagHook);
+        WindowManager w;
+        XposedHelpers.findAndHookMethod("android.view.WindowManagerGlobal", loadPackageParam.classLoader, "addView", View.class, ViewGroup.LayoutParams.class, Display.class, Window.class, mRemoveSecureParamHook);
+        XposedHelpers.findAndHookMethod("android.view.WindowManagerGlobal", loadPackageParam.classLoader, "updateViewLayout", View.class, ViewGroup.LayoutParams.class, mRemoveSecureParamHook);
         if (Build.VERSION.SDK_INT >= 17) {
             XposedHelpers.findAndHookMethod(SurfaceView.class, "setSecure", boolean.class,
                     mRemoveSetSecureHook);
@@ -35,6 +41,14 @@ public class DisableFlagSecureModule implements IXposedHookLoadPackage {
         @Override
         protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
             param.args[0] = false;
+        }
+    };
+
+    private final XC_MethodHook mRemoveSecureParamHook = new XC_MethodHook() {
+        @Override
+        protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+            WindowManager.LayoutParams params = (WindowManager.LayoutParams) param.args[1];
+            params.flags &= ~WindowManager.LayoutParams.FLAG_SECURE;
         }
     };
 
